@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:testing/class_object.dart';
 import 'package:http/http.dart';
@@ -32,20 +33,38 @@ Future<List<ClassObj>> classListByIDs(List<String> IDs) async {
   Map<String, dynamic>? parameters;
 
   for (int i = 0; i < IDs.length; ++i) {
-    String endpoint = "v3/colleges/ucdavis/terms/202203/courses?query=" + IDs[i] + "&limit=1";
+    String endpoint = "v3/colleges/ucdavis/terms/202203/courses/" + IDs[i];
+    print(endpoint); // TODO remove
 
     var uri = Uri.https(baseUrl, endpoint, parameters);
     Response response = await get(uri);
-    print(response.body.length); //TODO remove
-    List<dynamic> list = jsonDecode(response.body); //JSON string into map
-    List<ClassObj> classObj = list
-        .map((e) => ClassObj.fromJson(e))
-        .toList();
-    classList.add(classObj.first);
+    dynamic jsonObj = jsonDecode(response.body); //JSON string into map
 
-    //TODO remove
-    print("hello");
-    print(classObj.first.instructors);
+    List<dynamic> objSections = List<dynamic>.from(jsonObj['sections']);
+    List<String> parsedSections = List<String>.empty(growable: true);
+    Set<String> parsedInstructors = {};
+    for (int j = 0; j < objSections.length; ++j) { // get section id from every section
+      parsedSections.add(objSections[i]['id']);
+      for (int k = 0; k < objSections[i]['instructors'].length; ++k) { // add all instructors from all sections no repeats
+        parsedInstructors.add(objSections[i]['instructors'][k]);
+      }
+    }
+
+    ClassObj classObj = ClassObj(
+      id: jsonObj['id'],
+      code: jsonObj['code'],
+      title: jsonObj['title'],
+      level: jsonObj['level'],
+      subject: jsonObj['subject'],
+      minUnits: jsonObj['minUnits'],
+      maxUnits: jsonObj['maxUnits'],
+      description: jsonObj['description'],
+      attributes: List<String>.from(jsonObj['attributes']),
+      instructors: List<String>.from(parsedInstructors),
+      sections: parsedSections
+    );
+
+    classList.add(classObj);
   }
   return classList;
 }

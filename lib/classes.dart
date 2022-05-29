@@ -75,6 +75,7 @@ class _ClassCardState extends State<ClassCard> {
         onTap: () { /* open new page to show all app users in selected class */ },
         child: Container(
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Text(widget.classObj.code!)
             ],
