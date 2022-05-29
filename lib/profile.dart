@@ -1,10 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ProfilePage extends StatefulWidget {
   final User user;
+  final FirebaseFirestore db;
 
-  ProfilePage({Key? key, required this.user}) : super(key: key);
+  ProfilePage({Key? key, required this.user, required this.db}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _ProfilePageState();

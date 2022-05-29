@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:testing/app.dart';
@@ -11,12 +12,17 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  
 
-  runApp(const MyApp());
+  FirebaseFirestore _db = FirebaseFirestore.instance;
+
+  runApp(MyApp(db: _db));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  final FirebaseFirestore db;
+
+  const MyApp({Key? key, required this.db}) : super(key: key);
 
   // This widget is the root of your application.
   @override
@@ -35,13 +41,15 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const Home(),
+      home: Home(db: db),
     );
   }
 }
 
 class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+  final FirebaseFirestore db;
+  
+  const Home({Key? key, required this.db}) : super(key: key);
 
   @override
   State<Home> createState() => _HomeState();
@@ -66,7 +74,15 @@ class _HomeState extends State<Home> {
       return const SignInPage();
     }
 
-    return App(user: _user!);
+    // Add user to database if first login, otherwise do nothing
+    final userInfo = {"name": _user!.displayName, "email": _user!.email};
+    widget.db
+        .collection("users")
+        .doc(_user!.email)
+        .set(userInfo, SetOptions(merge: true))
+        .then((value) => print("user ${_user!.email} in database"));
+
+    return App(user: _user!, db: widget.db);
   }
 }
 

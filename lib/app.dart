@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:testing/classes.dart';
@@ -5,8 +6,9 @@ import 'package:testing/profile.dart';
 
 class App extends StatefulWidget {
   final User user;
+  final FirebaseFirestore db;
 
-  const App({Key? key, required this.user}) : super(key: key);
+  const App({Key? key, required this.user, required this.db}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _AppState();
@@ -33,9 +35,9 @@ class _AppState extends State<App> {
   Widget _buildScaffoldBody() {
     switch (_index) {
       case 0:
-        return ClassesPage(user: widget.user);
+        return ClassesPage(user: widget.user, db: widget.db);
       case 1:
-        return ProfilePage(user: widget.user);
+        return ProfilePage(user: widget.user, db: widget.db);
       default:
         throw Exception();
     }
