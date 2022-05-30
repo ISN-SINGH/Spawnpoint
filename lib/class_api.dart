@@ -43,7 +43,6 @@ Future<List<ClassObj>> classListByIDs(List<String> IDs) async {
     for (int j = 0; j < objSections.length; ++j) { // get section id from every section
       parsedSections.add(objSections[j]['id']);
       for (int k = 0; k < objSections[j]['instructors'].length; ++k) { // add all instructors from all sections no repeats
-        print(objSections[j]['instructors'][k]); // todo remove
         parsedInstructors.add(objSections[j]['instructors'][k]);
       }
     }
@@ -58,7 +57,9 @@ Future<List<ClassObj>> classListByIDs(List<String> IDs) async {
       maxUnits: jsonObj['maxUnits'],
       description: jsonObj['description'],
       attributes: List<String>.from(jsonObj['attributes']),
-      instructors: List<String>.from(parsedInstructors),
+      instructors: List<String>.from(parsedInstructors).isEmpty ?
+        List<String>.from(["Not listed"]) :
+        List<String>.from(parsedInstructors),
       sections: parsedSections
     );
 

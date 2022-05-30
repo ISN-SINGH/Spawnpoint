@@ -22,6 +22,9 @@ class UserObj {
     this.socials
   });
 
+  UserObj.simple(this.name, this.email, this.photoUrl) : bio = null, majors = null,
+                hobbies = null, classes = null, socials = null {}
+
   factory UserObj.fromFirestore(
       DocumentSnapshot<Map<String, dynamic>> snapshot,
       SnapshotOptions? options) {

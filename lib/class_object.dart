@@ -40,7 +40,9 @@ class ClassObj {
       maxUnits: json['maxUnits'],
       description: json['description'],
       attributes: List.from(json['attributes']),
-      instructors: List.from(json['instructors']),
+      instructors: List<String>.from(json['instructors']).isEmpty ?
+        List<String>.from(["Not listed"]) :
+        List<String>.from(json['instructors']),
       sections: List.from(json['sections']),
       capacity: json['capacity'],
       seatsAvailable: json['seatsAvailable']

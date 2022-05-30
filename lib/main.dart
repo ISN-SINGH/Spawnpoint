@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:testing/app.dart';
+import 'package:testing/firebase_user_object.dart';
 import 'package:testing/sign_in_page.dart';
 import 'firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -74,13 +75,26 @@ class _HomeState extends State<Home> {
       return const SignInPage();
     }
 
-    // Add user to database if first login, otherwise do nothing
-    final userInfo = {"name": _user!.displayName, "email": _user!.email, "photoUrl": _user!.photoURL};
-    widget.db
-        .collection("users")
-        .doc(_user!.email)
-        .set(userInfo, SetOptions(merge: true))
-        .then((value) => print("user ${_user!.email} in database"));
+    final userRef = widget.db.collection("users").doc(_user!.email)
+      .withConverter(fromFirestore: UserObj.fromFirestore, toFirestore: (UserObj userObj, _) => userObj.toFirestore());
+
+    userRef.get().then((docSnapshot) async {
+      if (docSnapshot.exists) {
+        print("user ${_user!.email} in database");
+      } else {
+        final userObj = UserObj.simple(_user!.displayName, _user!.email, _user!.photoURL);
+        await userRef.set(userObj); // create the user
+        print("user ${_user!.email} added to database");
+      }
+    });
+
+    // Above method may be better
+    // final userInfo = {"name": _user!.displayName, "email": _user!.email, "photoUrl": _user!.photoURL};
+    // widget.db
+    //     .collection("users")
+    //     .doc(_user!.email)
+    //     .set(userInfo, SetOptions(merge: true))
+    //     .then((value) => print("user ${_user!.email} in database"));
 
     return App(user: _user!, db: widget.db);
   }
