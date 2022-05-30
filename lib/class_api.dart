@@ -41,9 +41,10 @@ Future<List<ClassObj>> classListByIDs(List<String> IDs) async {
     List<String> parsedSections = List<String>.empty(growable: true);
     Set<String> parsedInstructors = {};
     for (int j = 0; j < objSections.length; ++j) { // get section id from every section
-      parsedSections.add(objSections[i]['id']);
-      for (int k = 0; k < objSections[i]['instructors'].length; ++k) { // add all instructors from all sections no repeats
-        parsedInstructors.add(objSections[i]['instructors'][k]);
+      parsedSections.add(objSections[j]['id']);
+      for (int k = 0; k < objSections[j]['instructors'].length; ++k) { // add all instructors from all sections no repeats
+        print(objSections[j]['instructors'][k]); // todo remove
+        parsedInstructors.add(objSections[j]['instructors'][k]);
       }
     }
 

@@ -19,6 +19,13 @@ class ClassesPage extends StatefulWidget {
 }
 
 class _ClassesPageState extends State<ClassesPage> {
+  late bool triggerStateChange;
+
+  @override
+  void initState() {
+    triggerStateChange = false;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,9 +53,15 @@ class _ClassesPageState extends State<ClassesPage> {
                       ),
                       floatingActionButton: FloatingActionButton( // Go to page to add new classes
                           child: Icon(Icons.add),
-                          onPressed: () => Navigator.push(
-                               context,
-                               MaterialPageRoute(builder: (context) => ClassAdd(db: widget.db, currClasses: widget.classes))))
+                          onPressed: () async {
+                            final value = await Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) =>
+                                  ClassAdd(db: widget.db, currClasses: widget.classes, user: widget.user)));
+                            setState(() { // forces ui to change after returning from add classes page
+                              triggerStateChange = triggerStateChange == false ? true : false;
+                            });
+                          })
                     );
                   }
 
