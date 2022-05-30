@@ -75,7 +75,7 @@ class _HomeState extends State<Home> {
     }
 
     // Add user to database if first login, otherwise do nothing
-    final userInfo = {"name": _user!.displayName, "email": _user!.email};
+    final userInfo = {"name": _user!.displayName, "email": _user!.email, "photoUrl": _user!.photoURL};
     widget.db
         .collection("users")
         .doc(_user!.email)

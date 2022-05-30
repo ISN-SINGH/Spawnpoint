@@ -4,6 +4,7 @@ class UserObj {
   final String? name;
   final String? email;
   final String? bio;
+  final String? photoUrl;
   final List<String>? majors;
   final List<String>? hobbies;
   final List<String>? classes; // list of class ids
@@ -14,6 +15,7 @@ class UserObj {
     this.name,
     this.email,
     this.bio,
+    this.photoUrl,
     this.majors,
     this.hobbies,
     this.classes,
@@ -28,6 +30,7 @@ class UserObj {
       name: data?['name'],
       email: data?['email'],
       bio: data?['bio'],
+      photoUrl: data?['photoUrl'],
       majors: data?['majors'] is Iterable ? List.from(data?['majors']) : null,
       hobbies: data?['hobbies'] is Iterable ? List.from(data?['hobbies']) : null,
       classes: data?['classes'] is Iterable ? List.from(data?['classes']) : null,
@@ -40,6 +43,7 @@ class UserObj {
       "name": name,
       "email": email,
       "bio": bio,
+      "photoUrl": photoUrl,
       "majors": majors,
       "hobbies": hobbies,
       "classes": classes,

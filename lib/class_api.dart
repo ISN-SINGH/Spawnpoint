@@ -9,21 +9,23 @@ import 'package:http/http.dart';
 Future<List<ClassObj>> classList(String query) async {
   String baseUrl = "api.schedgo.com";
   String endpoint = "v3/colleges/ucdavis/terms/202203/courses?query=";
-  final split = query.split(" ");
-  for (int i = 0; i < split.length; ++i) {
-    endpoint = endpoint + split[i];
-    if (i != split.length - 1) {
-      endpoint = endpoint + "%20";
-    }
-  }
-  endpoint = endpoint + "&limit=10";
+  Map<String, dynamic>? parameters;
 
-  var uri = Uri.http(baseUrl, endpoint);
+  final split = query.split(" ");
+  endpoint = endpoint + split.join("%20") + "&limit=10";
+
+  print("starting get");
+  var uri = Uri.https(baseUrl, endpoint, parameters);
   Response response = await get(uri);
-  List<dynamic> list = jsonDecode(response.body); //JSON string into map
-  List<ClassObj> classObjs = list
+  print("this prints"); // todo remove
+  print(response.body.length); // this prints with 0 TODO remove
+  List<dynamic> jsonObj = jsonDecode(response.body); //JSON string into map
+  print("this doesn't print");
+
+  List<ClassObj> classObjs = jsonObj
     .map((e) => ClassObj.fromJson(e))
     .toList();
+
   return classObjs;
 }
 
@@ -34,7 +36,6 @@ Future<List<ClassObj>> classListByIDs(List<String> IDs) async {
 
   for (int i = 0; i < IDs.length; ++i) {
     String endpoint = "v3/colleges/ucdavis/terms/202203/courses/" + IDs[i];
-    print(endpoint); // TODO remove
 
     var uri = Uri.https(baseUrl, endpoint, parameters);
     Response response = await get(uri);
