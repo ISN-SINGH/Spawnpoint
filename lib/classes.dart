@@ -46,34 +46,34 @@ class _ClassesPageState extends State<ClassesPage> {
                 builder: (context, AsyncSnapshot<List<ClassObj>> new_snapshot) {
                   if (new_snapshot.hasData) {
                     widget.classes = new_snapshot.data!;
-                    return Scaffold(
-                      body: ListView.builder(
+                      return ListView.separated(
+                          separatorBuilder: (context, index) {
+                            return SizedBox(height: 10);
+                          },
                           itemCount: new_snapshot.data!.length,
                           itemBuilder: (context, index) => ClassCard(classObj: new_snapshot.data![index], db: widget.db, canRedirect: true),
-                      ),
-                      floatingActionButton: FloatingActionButton( // Go to page to add new classes
-                          child: Icon(Icons.add),
-                          onPressed: () async {
-                            final value = await Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) =>
-                                  ClassAdd(db: widget.db, currClasses: widget.classes, user: widget.user)));
-                            setState(() { // forces ui to change after returning from add classes page
-                              triggerStateChange = triggerStateChange == false ? true : false;
-                            });
-                          })
-                    );
+                      );
                   }
-
                   return const Center(child: CircularProgressIndicator());
                 },
               );
             }
-
           }
           return const Center(child: CircularProgressIndicator());
         },
-      )
+      ),
+
+        floatingActionButton: FloatingActionButton( // Go to page to add new classes
+          child: Icon(Icons.add),
+          onPressed: () async {
+            final value = await Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) =>
+              ClassAdd(db: widget.db, currClasses: widget.classes, user: widget.user)));
+            setState(() { // forces ui to change after returning from add classes page
+            triggerStateChange = triggerStateChange == false ? true : false;
+            });
+        })
     ); // add floating action button for adding classes
   }
 }
@@ -93,53 +93,35 @@ class _ClassCardState extends State<ClassCard> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
-            children: [Material(
-              // type: MaterialType.transparency,
-              // color: Colors.teal.shade50,
-              child: InkWell( // add functionality to delete class with long hold?
-                onTap: () {},// onTap: () => Navigator.push( // go to page to see peers in class only if redirect true
-                //     context,
-                //     MaterialPageRoute(builder: (context) => PeerPage(db: widget.db, classID: widget.classObj.id!))
-                // ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                            widget.classObj.code! + " - " + widget.classObj.title!,
-                            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
-                        Text(
-                            "Instructors: " + widget.classObj.instructors!.join(", "),
-                            style: const TextStyle(fontSize: 14.0))
-                      ],
-                    ),
+      padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.25),
+      child: Material(
+        child: InkWell(
+          onTap: () {}, // go to peer page
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween ,children: [
+                Text(
+                    widget.classObj.code! + " - " + widget.classObj.title!,
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0)),
+                Text(
+                    "Units: " + widget.classObj.minUnits.toString(),
+                    style: const TextStyle(fontSize: 14.0))
 
-                    Column(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(
-                          "Units: " + widget.classObj.minUnits.toString(),
-                          style: const TextStyle(fontSize: 14.0)
-                        ),
-                        Text(
-                            "Sections: " + widget.classObj.sections!.length.toString(),
-                            style: const TextStyle(fontSize: 14.0))
-                      ],
-                    )
-                  ],
-                ),
-              ),
-            )]
+              ],),
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                Text(
+                    "Instructors: " + widget.classObj.instructors!.join(", "),
+                    style: const TextStyle(fontSize: 14.0)),
+
+                Text(
+                    "Sections: " + widget.classObj.sections!.length.toString(),
+                    style: const TextStyle(fontSize: 14.0))
+              ],),
+            ],
+          ),
         )
+      ),
     );
   }
 
