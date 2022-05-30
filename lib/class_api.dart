@@ -9,7 +9,7 @@ import 'package:http/http.dart' as http;
 Future<List<ClassObj>> classList(String query) async {
   String baseUrl = "api.schedgo.com";
   String endpoint = "/v3/colleges/ucdavis/terms/202203/courses?query=";
-  
+
   final split = query.split(" ");
   endpoint = endpoint + split.join("%20") + "&limit=10";
 
