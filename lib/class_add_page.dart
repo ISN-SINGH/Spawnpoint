@@ -68,6 +68,7 @@ class _ClassAddState extends State<ClassAdd> {
       builder: (context, AsyncSnapshot<List<ClassObj>> snapshot) {
         if (snapshot.hasData) {
           return ListView.builder(
+            shrinkWrap: true,
             itemCount: snapshot.data!.length,
             itemBuilder: (context, index) => _queriedClassCard(snapshot.data![index]),
           );

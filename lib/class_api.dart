@@ -1,26 +1,22 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:testing/class_object.dart';
 import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
 
 // Add functionality for multiple terms in the future
 // Get classes based on user query
 Future<List<ClassObj>> classList(String query) async {
   String baseUrl = "api.schedgo.com";
-  String endpoint = "v3/colleges/ucdavis/terms/202203/courses?query=";
-  Map<String, dynamic>? parameters;
-
+  String endpoint = "/v3/colleges/ucdavis/terms/202203/courses?query=";
+  
   final split = query.split(" ");
   endpoint = endpoint + split.join("%20") + "&limit=10";
 
   print("starting get");
-  var uri = Uri.https(baseUrl, endpoint, parameters);
-  Response response = await get(uri);
-  print("this prints"); // todo remove
-  print(response.body.length); // this prints with 0 TODO remove
+  Response response = await http.get(Uri.parse("https://" + baseUrl + endpoint));
+  print(baseUrl + endpoint);
   List<dynamic> jsonObj = jsonDecode(response.body); //JSON string into map
-  print("this doesn't print");
 
   List<ClassObj> classObjs = jsonObj
     .map((e) => ClassObj.fromJson(e))
