@@ -46,12 +46,14 @@ class _ClassesPageState extends State<ClassesPage> {
                 builder: (context, AsyncSnapshot<List<ClassObj>> new_snapshot) {
                   if (new_snapshot.hasData) {
                     widget.classes = new_snapshot.data!;
-                      return ListView.separated(
-                          separatorBuilder: (context, index) {
-                            return SizedBox(height: 10);
-                          },
-                          itemCount: new_snapshot.data!.length,
-                          itemBuilder: (context, index) => ClassCard(classObj: new_snapshot.data![index], db: widget.db, canRedirect: true),
+                      return Padding(padding: EdgeInsets.symmetric(vertical: 20, horizontal: MediaQuery.of(context).size.width * 0.25),
+                        child: ListView.separated(
+                            separatorBuilder: (context, index) {
+                              return SizedBox(height: 10);
+                            },
+                            itemCount: new_snapshot.data!.length,
+                            itemBuilder: (context, index) => ClassCard(classObj: new_snapshot.data![index], db: widget.db, canRedirect: true),
+                        ),
                       );
                   }
                   return const Center(child: CircularProgressIndicator());
@@ -92,8 +94,7 @@ class ClassCard extends StatefulWidget {
 class _ClassCardState extends State<ClassCard> {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.25),
+    return Container(
       child: Material(
         child: InkWell(
           onTap: () {}, // go to peer page

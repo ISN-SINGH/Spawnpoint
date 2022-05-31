@@ -71,10 +71,10 @@ class _ClassAddState extends State<ClassAdd> {
                   child: Icon(Icons.manage_search))
             ],
           ),
-          Container(
-            margin: EdgeInsets.only(top: 50.0),
-            child: queriedClasses(_query),
-          )
+          Padding(padding: EdgeInsets.symmetric(
+              vertical: 20,
+              horizontal: MediaQuery.of(context).size.width * 0.25),
+              child: queriedClasses(_query))
         ],
       )
     );
@@ -89,7 +89,10 @@ class _ClassAddState extends State<ClassAdd> {
       future: classList(query),
       builder: (context, AsyncSnapshot<List<ClassObj>> snapshot) {
         if (snapshot.hasData) {
-          return ListView.builder( // todo make each child same width
+          return ListView.separated(
+            separatorBuilder: (context, index) {
+              return SizedBox(height: 10);
+            },
             shrinkWrap: true,
             itemCount: snapshot.data!.length,
             itemBuilder: (context, index) => _queriedClassCard(snapshot.data![index]),
@@ -101,28 +104,30 @@ class _ClassAddState extends State<ClassAdd> {
   }
 
   Widget _queriedClassCard(ClassObj classObj) {
-    return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-      ClassCard(classObj: classObj, db: widget.db, canRedirect: false),
-      ElevatedButton(
-          onPressed: () { // alert user whether or not class was added/class is already present
-            for (var temp_class in widget.currClasses) {
-              if (temp_class.id == classObj.id) {
-                showDialog(context: context, builder: (BuildContext context) => AlertDialog(
-                  title: Text("Schedule Alert"),
-                  content: Text("This class is already present in your schedule"),
-                  actions: [TextButton(onPressed: () => Navigator.pop(context, 'OK'), child: Text("OK"))],
-                ));
-                return;
+    return Row(mainAxisAlignment: MainAxisAlignment.start, mainAxisSize: MainAxisSize.max, children: [
+      Expanded(child: ClassCard(classObj: classObj, db: widget.db, canRedirect: false)),
+      Container(margin: EdgeInsets.only(left: 10),
+        child: ElevatedButton(
+            onPressed: () { // alert user whether or not class was added/class is already present
+              for (var temp_class in widget.currClasses) {
+                if (temp_class.id == classObj.id) {
+                  showDialog(context: context, builder: (BuildContext context) => AlertDialog(
+                    title: Text("Schedule Alert"),
+                    content: Text("This class is already present in your schedule"),
+                    actions: [TextButton(onPressed: () => Navigator.pop(context, 'OK'), child: Text("OK"))],
+                  ));
+                  return;
+                }
               }
-            }
-            showDialog(context: context, builder: (BuildContext context) => AlertDialog(
-              title: Text("Schedule Alert"),
-              content: Text("Class added to schedule"),
-              actions: [TextButton(onPressed: () => Navigator.pop(context, 'OK'), child: Text("OK"))],
-            ));
-            widget.currClasses.add(classObj);
-          },
-          child: Icon(Icons.add))
+              showDialog(context: context, builder: (BuildContext context) => AlertDialog(
+                title: Text("Schedule Alert"),
+                content: Text("Class added to schedule"),
+                actions: [TextButton(onPressed: () => Navigator.pop(context, 'OK'), child: Text("OK"))],
+              ));
+              widget.currClasses.add(classObj);
+            },
+            child: Icon(Icons.add)),
+      )
     ],);
   }
 
