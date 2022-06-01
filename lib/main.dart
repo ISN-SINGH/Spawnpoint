@@ -78,6 +78,31 @@ class _HomeState extends State<Home> {
     final userRef = widget.db.collection("users").doc(_user!.email)
       .withConverter(fromFirestore: UserObj.fromFirestore, toFirestore: (UserObj userObj, _) => userObj.toFirestore());
 
+    return FutureBuilder( // first future builder to check if user exists
+      future: userRef.get(),
+      builder: (context, AsyncSnapshot<DocumentSnapshot<UserObj>> snapshot) {
+        if (snapshot.hasData) {
+          if (snapshot.data!.exists) {
+            print("user ${_user!.email} in database");
+            return App(user: _user!, db: widget.db);
+          } else {
+            final userObj = UserObj.simple(_user!.displayName, _user!.email, _user!.photoURL);
+            return FutureBuilder( // add user to db
+              future: userRef.set(userObj),
+              builder: (context, AsyncSnapshot<void> snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) { // user added to db
+                  print("user ${_user!.email} added to database");
+                  return App(user: _user!, db: widget.db);
+                }
+                return Container();
+              },
+            );
+          }
+        }
+        return Container();
+      },
+    );
+
     userRef.get().then((docSnapshot) async {
       if (docSnapshot.exists) {
         print("user ${_user!.email} in database");

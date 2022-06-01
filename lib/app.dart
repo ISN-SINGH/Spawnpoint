@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:testing/classes.dart';
 import 'package:testing/profile.dart';
 
+import 'firebase_user_object.dart';
+
 class App extends StatefulWidget {
   final User user;
   final FirebaseFirestore db;
@@ -37,7 +39,7 @@ class _AppState extends State<App> {
       case 0:
         return ClassesPage(user: widget.user, db: widget.db);
       case 1:
-        return ProfilePage(user: widget.user, db: widget.db);
+        return ProfilePage(user: widget.user, db: widget.db, profileUserId: widget.user.email!);
       default:
         throw Exception();
     }

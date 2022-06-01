@@ -39,7 +39,7 @@ class _ClassesPageState extends State<ClassesPage> {
         builder: (context, AsyncSnapshot<DocumentSnapshot<UserObj>> snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data!.data()!.classes == null) {
-              return const Center(child: Text("You have no classes in your schedule"));
+              return const Center(child: Text("You have no classes in your schedule. Let's add some!"));
             } else {
               return FutureBuilder( // Get ClassObjs for each class id of user and display
                 future: classListByIDs(snapshot.data!.data()!.classes!),
@@ -95,6 +95,9 @@ class _ClassCardState extends State<ClassCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      decoration: BoxDecoration(
+
+      ),
       child: Material(
         child: InkWell(
           onTap: () {}, // go to peer page

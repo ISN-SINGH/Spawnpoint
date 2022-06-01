@@ -3,19 +3,20 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:testing/firebase_user_object.dart';
 
-class ProfilePage extends StatefulWidget {
+class ProfilePage extends StatefulWidget { // TODO get current user object with initState()
   final User user;
   final FirebaseFirestore db;
+  final String profileUserId; // email of user or profile to display
 
 
-  ProfilePage({Key? key, required this.user, required this.db}) : super(key: key);
+  ProfilePage({Key? key, required this.user, required this.db, required this.profileUserId}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _ProfilePageState();
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  late UserObj thisUser; // UserObj of profile to display
+  // late UserObj thisUser; // UserObj of profile to display
   late bool isCurrUser; // if profile page is of the current logged in user
   late bool majorChanged, bioChanged, hobbiesChanged, socialsChanged; // update database if change
 
@@ -28,23 +29,19 @@ class _ProfilePageState extends State<ProfilePage> {
   late Map<String, dynamic> thisUser_socials;
 
   @override
-  void initState() async {
-    final docSnap = await widget.db.collection("users").doc(widget.user.email)
-      .withConverter(fromFirestore: UserObj.fromFirestore, toFirestore: (UserObj userObj, _) => userObj.toFirestore())
-      .get();
-    thisUser = docSnap.data()!;
+  void initState() {
+    isCurrUser = widget.profileUserId == widget.user.email;
+    // thisUser_name = thisUser.name!;
+    // thisUser_photoUrl = thisUser.photoUrl!;
+    //   //thisUser_majors = thisUser.majors
 
-    isCurrUser = thisUser.email == widget.user.email;
-    thisUser_name = thisUser.name!;
-    thisUser_photoUrl = thisUser.photoUrl!;
-    //thisUser_majors = thisUser.majors
-
+    //print(isCurrUser);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (!isCurrUser) {
+    if (!isCurrUser) { // user won't be able to edit this profile because it isn't theirs TODO implement
       return Scaffold();
     }
 
