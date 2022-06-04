@@ -22,6 +22,8 @@ Group Members:
 isnsingh@ucdavis.edu, Ishan Singh, s#
 stdchang@ucdavis.edu, Steven Chang, 918247544
 
+
+
 Imagining ourselves in world that is a video game, because just like life, video games are hard. 
 We spawn in, next to a bed. Confused, scared, anxious if we are going to fit into the class or not. 
 Perhaps the subject material is difficult, and a little outside help is needed. 
