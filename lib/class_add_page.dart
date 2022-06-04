@@ -105,7 +105,7 @@ class _ClassAddState extends State<ClassAdd> {
 
   Widget _queriedClassCard(ClassObj classObj) {
     return Row(mainAxisAlignment: MainAxisAlignment.start, mainAxisSize: MainAxisSize.max, children: [
-      Expanded(child: ClassCard(classObj: classObj, db: widget.db, canRedirect: false)),
+      Expanded(child: ClassCard(classObj: classObj, db: widget.db, canRedirect: false, user: widget.user)),
       Container(margin: EdgeInsets.only(left: 10),
         child: ElevatedButton(
             onPressed: () { // alert user whether or not class was added/class is already present

@@ -52,7 +52,7 @@ class _ClassesPageState extends State<ClassesPage> {
                               return SizedBox(height: 10);
                             },
                             itemCount: new_snapshot.data!.length,
-                            itemBuilder: (context, index) => ClassCard(classObj: new_snapshot.data![index], db: widget.db, canRedirect: true),
+                            itemBuilder: (context, index) => ClassCard(classObj: new_snapshot.data![index], db: widget.db, canRedirect: true, user: widget.user,),
                         ),
                       );
                   }
@@ -73,7 +73,7 @@ class _ClassesPageState extends State<ClassesPage> {
               MaterialPageRoute(builder: (context) =>
               ClassAdd(db: widget.db, currClasses: widget.classes, user: widget.user)));
             setState(() { // forces ui to change after returning from add classes page
-            triggerStateChange = triggerStateChange == false ? true : false;
+              triggerStateChange = triggerStateChange == false ? true : false;
             });
         })
     ); // add floating action button for adding classes
@@ -84,8 +84,9 @@ class ClassCard extends StatefulWidget {
   final ClassObj classObj;
   final FirebaseFirestore db;
   final bool canRedirect;
+  final User user;
 
-  ClassCard({Key? key, required this.classObj, required this.db, required this.canRedirect}) : super(key: key);
+    ClassCard({Key? key, required this.classObj, required this.db, required this.canRedirect, required this.user}) : super(key: key);
 
   @override
   State<ClassCard> createState() => _ClassCardState();
@@ -100,7 +101,12 @@ class _ClassCardState extends State<ClassCard> {
       ),
       child: Material(
         child: InkWell(
-          onTap: () {}, // go to peer page
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) =>
+                    PeerPage(user: widget.user, db: widget.db, classID: widget.classObj.id!)));
+          },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
