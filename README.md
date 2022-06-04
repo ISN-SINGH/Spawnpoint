@@ -18,8 +18,14 @@ samples, guidance on mobile development, and a full API reference.
 
 # ECS 198 PROJECT: SPAWN POINT
 https://youtu.be/Ygjs6_y6zuE is the link to the Demo
+
+
 Group Members:
+
+
 isnsingh@ucdavis.edu, Ishan Singh, s#
+
+
 stdchang@ucdavis.edu, Steven Chang, 918247544
 
 
