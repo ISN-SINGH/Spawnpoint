@@ -17,7 +17,7 @@ samples, guidance on mobile development, and a full API reference.
 
 
 # ECS 198 PROJECT: SPAWN POINT
-https://youtu.be/Ygjs6_y6zuE is the link to the Demo
+link to the Demo: https://youtu.be/Ygjs6_y6zuE
 
 
 Group Members:
