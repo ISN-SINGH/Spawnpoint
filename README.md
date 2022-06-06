@@ -1,13 +1,13 @@
 
 
 # ECS 198 PROJECT: SPAWN POINT
-link to the Demo: https://youtu.be/Ygjs6_y6zuE
+Link to the Demo: https://youtu.be/Ygjs6_y6zuE
 
 
 Group Members:
 
 
-isnsingh@ucdavis.edu, Ishan Singh, s#
+isnsingh@ucdavis.edu, Ishan Singh, 918714019
 
 
 stdchang@ucdavis.edu, Steven Chang, 918247544
